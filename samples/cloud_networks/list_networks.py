@@ -23,16 +23,18 @@ import sys
 import pyrax
 from pyrax import utils
 
+f=open(os.devnull, 'w')
+
+sys.stderr = f
+
+
+
 region=sys.argv[1]
-new_network_name=sys.argv[2]
-new_network_cidr=sys.argv[3]
 
 pyrax.set_setting("identity_type", "rackspace")
 creds_file = os.path.expanduser("~/.rackspace_cloud_credentials")
 pyrax.set_credential_file(creds_file ,region=region)
 cnw = pyrax.cloud_networks
-#new_network_name = "SAMPLE_NETWORK"
-#new_network_cidr = "192.168.20.0/24"
 
 # List initial status
 nets = cnw.list()
@@ -40,6 +42,3 @@ for net in nets:
     print("Network: %s; cidr=%s; id=%s" % (net.label, net.cidr, net.id))
 print()
 
-# Add the new network
-new_net = cnw.create(new_network_name, cidr=new_network_cidr)
-print("NEW NET", new_net)
