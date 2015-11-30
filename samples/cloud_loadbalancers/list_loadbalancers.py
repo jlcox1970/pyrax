@@ -19,6 +19,8 @@
 from __future__ import print_function
 
 import os
+import sys
+
 import pyrax
 
 pyrax.set_setting("identity_type", "rackspace")
@@ -26,5 +28,20 @@ creds_file = os.path.expanduser("~/.rackspace_cloud_credentials")
 pyrax.set_credential_file(creds_file)
 clb = pyrax.cloud_loadbalancers
 
-# Get available protocols
-print("Protocols:", clb.protocols)
+try:
+    #lb = clb.list()[0]
+    lb = clb.list()
+except IndexError:
+    print("You do not have any load balancers yet.")
+    print("Please create one and then re-run this script.")
+    sys.exit()
+
+for i in range(0,len(lb)):
+	print("Load Balancer:", lb[i])
+	print("Name:", lb[i].name)
+	print("ID:", lb[i].id)
+	print("Status:", lb[i].status)
+	print("Nodes:", lb[i].nodes)
+	print("Virtual IPs:", lb[i].virtual_ips)
+	print("Algorithm:", lb[i].algorithm)
+	print("Protocol:", lb[i].protocol)
